@@ -3,67 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Image Generator</title>
+<title>Ofbuzz AI Generator</title>
 
 <style>
 body{
-background:#0f172a;
+margin:0;
+background:#0b0f19;
 color:white;
 font-family:Arial;
-text-align:center;
-padding:40px;
+}
+
+.topbar{
+padding:15px 20px;
+border-bottom:1px solid #1f2937;
+font-size:18px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.promptbox{
+background:#111827;
+border-radius:12px;
+padding:15px;
 }
 
 textarea{
-width:80%;
-padding:15px;
-margin:10px;
-background:#111827;
-color:white;
+width:100%;
+background:transparent;
 border:none;
+color:white;
+font-size:16px;
+outline:none;
+resize:none;
+height:80px;
+}
+
+.controls{
+display:flex;
+gap:10px;
+margin-top:10px;
 }
 
 button{
-padding:15px 30px;
-background:#4f46e5;
-color:white;
+background:#6366f1;
 border:none;
+color:white;
+padding:10px 20px;
+border-radius:8px;
 cursor:pointer;
 }
 
-img{
-width:80%;
+.grid{
 margin-top:20px;
-border-radius:10px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.card{
+background:#111827;
+border-radius:12px;
+height:300px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#6b7280;
+}
+
+img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:12px;
 }
 </style>
 
 </head>
 <body>
 
-<h1>AI Image Generator</h1>
+<div class="topbar">
+Ofbuzz AI Image Generator
+</div>
 
-<textarea id="prompt" placeholder="Describe image..."></textarea>
-<br>
+<div class="container">
+
+<div class="promptbox">
+<textarea id="prompt" placeholder="Describe the image you want to generate..."></textarea>
+
+<div class="controls">
 <button onclick="generate()">Generate</button>
+<button onclick="clearImages()">Clear</button>
+</div>
+</div>
 
-<div id="result"></div>
+<div class="grid" id="grid">
+
+<div class="card">Image 1</div>
+<div class="card">Image 2</div>
+<div class="card">Image 3</div>
+<div class="card">Image 4</div>
+
+</div>
+
+</div>
 
 <script>
 function generate(){
 
-const prompt = document.getElementById("prompt").value
+const prompt=document.getElementById("prompt").value
 
-const seed = Math.floor(Math.random()*1000000)
+const grid=document.getElementById("grid")
 
-const url =
-"https://image.pollinations.ai/prompt/"
-+ encodeURIComponent(prompt)
-+ "?seed="+seed+"&width=1024&height=1024&model=flux"
+grid.innerHTML=""
 
-document.getElementById("result").innerHTML =
-"<img src='"+url+"'>"
+for(let i=0;i<4;i++){
 
+const seed=Math.floor(Math.random()*1000000)
+
+const url="https://picsum.photos/seed/"+seed+"/512/512"
+
+const div=document.createElement("div")
+div.className="card"
+
+div.innerHTML="<img src='"+url+"'>"
+
+grid.appendChild(div)
+
+}
+
+}
+
+function clearImages(){
+location.reload()
 }
 </script>
 
