@@ -1,5 +1,4 @@
 const express = require("express")
-const axios = require("axios")
 
 const app = express()
 
@@ -12,31 +11,18 @@ try{
 
 const prompt = req.body.prompt
 
-const response = await axios({
-method: "post",
-url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2",
-data: {
-inputs: prompt
-},
-responseType: "arraybuffer",
-headers: {
-"Content-Type": "application/json"
-}
-})
-
-const base64 = Buffer.from(response.data).toString("base64")
-
-const image = `data:image/png;base64,${base64}`
+const image = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`
 
 res.json({image})
 
 }catch(e){
-console.log(e.message)
-res.json({error:"error generating"})
+
+res.json({error:"failed"})
+
 }
 
 })
 
 app.listen(3000,()=>{
-console.log("server started")
+console.log("server running")
 })
