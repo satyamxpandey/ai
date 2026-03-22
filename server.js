@@ -12,15 +12,17 @@ try{
 
 const prompt = req.body.prompt
 
-const response = await axios.post(
-"https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2",
-{
+const response = await axios({
+method: "post",
+url: "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2",
+data: {
 inputs: prompt
 },
-{
-responseType: "arraybuffer"
+responseType: "arraybuffer",
+headers: {
+"Content-Type": "application/json"
 }
-)
+})
 
 const base64 = Buffer.from(response.data).toString("base64")
 
@@ -29,9 +31,12 @@ const image = `data:image/png;base64,${base64}`
 res.json({image})
 
 }catch(e){
-res.json({error:"error"})
+console.log(e.message)
+res.json({error:"error generating"})
 }
 
 })
 
-app.listen(3000)
+app.listen(3000,()=>{
+console.log("server started")
+})
