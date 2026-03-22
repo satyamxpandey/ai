@@ -2,17 +2,12 @@ async function generate(){
 
 const prompt = document.getElementById("prompt").value
 
-const res = await fetch("/generate",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({prompt})
-})
+const seed = Math.floor(Math.random()*1000000)
 
-const data = await res.json()
+const image =
+`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?seed=${seed}&width=1024&height=1024&model=flux`
 
-document.getElementById("result").innerHTML=
-`<img src="${data.image}" />`
+document.getElementById("result").innerHTML =
+`<img src="${image}" />`
 
 }
