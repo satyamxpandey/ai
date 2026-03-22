@@ -8,23 +8,29 @@ app.use(express.static("."))
 
 app.post("/generate", async (req,res)=>{
 
+try{
+
 const prompt = req.body.prompt
 
 const response = await axios.post(
-"https://api.openai.com/v1/images/generations",
+"https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2",
 {
-model:"gpt-image-1",
-prompt:prompt
+inputs: prompt
 },
 {
-headers:{
-"Authorization":"Bearer YOUR_API_KEY"
+responseType: "arraybuffer"
 }
-})
+)
 
-res.json({
-image: response.data.data[0].url
-})
+const base64 = Buffer.from(response.data).toString("base64")
+
+const image = `data:image/png;base64,${base64}`
+
+res.json({image})
+
+}catch(e){
+res.json({error:"error"})
+}
 
 })
 
